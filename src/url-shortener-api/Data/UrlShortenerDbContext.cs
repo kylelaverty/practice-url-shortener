@@ -1,0 +1,13 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Url.Shortener.Api.Data.Entities;
+
+namespace Url.Shortener.Api.Data;
+
+public class UrlShortenerDbContext : DbContext
+{
+    public UrlShortenerDbContext(DbContextOptions<UrlShortenerDbContext> options)
+        : base(options)
+    { }
+
+    public DbSet<ShortenedUrl> Urls => Set<ShortenedUrl>();
+}

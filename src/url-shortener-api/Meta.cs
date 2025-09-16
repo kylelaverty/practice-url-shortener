@@ -11,3 +11,4 @@ using System.Runtime.CompilerServices;
 /// This class is required for the tests to work.
 /// </summary>
 public partial class Program { }
+

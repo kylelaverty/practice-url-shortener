@@ -5,6 +5,7 @@ using Url.Shortener.Api.Middleware;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
+using Url.Shortener.Api.Data;
 
 const string applicationName = "Url Shortener API";
 
@@ -48,6 +49,9 @@ try
                 .Enrich.WithProperty("BuildDate", buildDate.ToString("f", CultureInfo.InvariantCulture))
         );
 
+    // Add the DB Config
+    builder.AddNpgsqlDbContext<UrlShortenerDbContext>(connectionName: "urlshortenerdb");
+    
     _ = builder.Services
         .AddFastEndpoints()
         .SwaggerDocument();
@@ -63,8 +67,6 @@ try
         .UseSerilogRequestLogging()
         .UseFastEndpoints(c =>
         {
-            c.Versioning.Prefix = "v";
-            c.Endpoints.RoutePrefix = "api";
             c.Errors.UseProblemDetails();
         });
 
@@ -75,6 +77,10 @@ try
         {
             _ = options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.RestSharp);
         });
+    }
+    else
+    {
+        _ = app.UseHttpsRedirection();
     }
 
     await app.RunAsync();

@@ -6,4 +6,7 @@
     <Project Path="src/aspire/url-shortener-aspire-apphost/Url.Shortener.Aspire.AppHost.csproj" />
     <Project Path="src/aspire/url-shortener-aspire-servicedefaults/Url.Shortener.Aspire.ServiceDefaults.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/url-shortener-api-tests/Url.Shortener.Api.Tests.csproj" />
+  </Folder>
 </Solution>
