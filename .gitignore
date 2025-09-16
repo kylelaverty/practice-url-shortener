@@ -416,3 +416,16 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# JetBrains Rider
+*.sln.iml
+.idea/*
+
+# Docker Compose
+**/compose
+
+# Aspire containers
+src/containers/*
+/src/containers*
+
+*.tick
