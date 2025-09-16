@@ -8,7 +8,12 @@ var flagdServerTag = "latest";
 var postgresHost = builder.AddPostgres("postgres")
                           .WithImageTag(postgresTag)
                           .WithDataBindMount(source: "../../containers/postgres/data", isReadOnly: false)
-                          .WithPgAdmin(pgAdmin => pgAdmin.WithHostPort(6060))
+                          .WithPgAdmin(pgAdmin =>
+                          {
+                              pgAdmin.ExcludeFromManifest();
+                              pgAdmin.WithLifetime(ContainerLifetime.Persistent);
+                              pgAdmin.WithHostPort(6060);
+                          })
                           .ExcludeFromManifest()
                           .WithLifetime(ContainerLifetime.Persistent);
 

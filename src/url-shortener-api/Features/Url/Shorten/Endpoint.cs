@@ -6,9 +6,7 @@ namespace Url.Shortener.Api.Features.Url.Shorten;
 
 public record Request(string? OriginalUrl);
 
-public record Response(string ShortenedUrl);
-
-public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request, Response>
+public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request>
 {
     public override void Configure()
     {
@@ -20,7 +18,6 @@ public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request, Respo
         );
     }
 
-    /// <inheritdoc/>
     public override async Task HandleAsync(Request req, CancellationToken ct = default)
     {
         Logger?.LogInformation("Shortening URL: {Url}", req.OriginalUrl);
@@ -35,8 +32,9 @@ public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request, Respo
         // Update the DB.
         _ = dbContext.Urls.Add(newUrl);
         _ = await dbContext.SaveChangesAsync(ct);
-        
-        var shortenedUrl = $"https://smu.com/r/{newUrl.GeneratedCode}";
-        await Send.OkAsync(new Response(shortenedUrl), cancellation: ct);
+
+        await Send.CreatedAtAsync<Resolver.Endpoint>(
+            new { GeneratedCode = newUrl.GeneratedCode }
+            , cancellation: ct);
     }
 }
