@@ -31,9 +31,9 @@ namespace Url.Shortener.Api.Data.Migrations.UrlShortener
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("created_date_utc");
 
                     b.Property<string>("GeneratedCode")
                         .IsRequired()
@@ -46,6 +46,9 @@ namespace Url.Shortener.Api.Data.Migrations.UrlShortener
                         .HasColumnName("original_url");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GeneratedCode")
+                        .IsUnique();
 
                     b.ToTable("shortened_urls", "url");
                 });

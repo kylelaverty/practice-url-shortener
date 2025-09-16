@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Url.Shortener.Api.Data;
 using Url.Shortener.Api.Data.Entities;
@@ -23,11 +24,20 @@ public class Endpoint(UrlShortenerDbContext dbContext, IOptionsSnapshot<Shortene
     {
         Logger?.LogInformation("Shortening URL: {Url}", req.OriginalUrl);
 
+        var uniqueCodeFound = false;
+        var generatedCode = string.Empty;
+        while (!uniqueCodeFound)
+        {
+            generatedCode = SecureAlphanumericGenerator.GenerateSecureRandomAlphanumeric(options.Value.CodeGenLength);
+            uniqueCodeFound =
+                !await dbContext.Urls.AnyAsync(s => s.GeneratedCode == generatedCode, cancellationToken: ct);
+        }
+        
         var newUrl = new ShortenedUrl()
         {
             OriginalUrl = req.OriginalUrl!,
-            GeneratedCode = SecureAlphanumericGenerator.GenerateSecureRandomAlphanumeric(options.Value.CodeGenLength),
-            CreatedDate = DateTime.UtcNow,
+            GeneratedCode = generatedCode,
+            CreatedDateUtc = DateTime.UtcNow,
         };
         
         // Update the DB.

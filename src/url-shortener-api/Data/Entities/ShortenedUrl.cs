@@ -18,6 +18,6 @@ public class ShortenedUrl
     [Column("generated_code")]
     public required string GeneratedCode { get; set; }
     
-    [Column("created_date")]
-    public DateTime CreatedDate { get; set; }
+    [Column("created_date_utc")]
+    public DateTime CreatedDateUtc  { get; set; }
 }

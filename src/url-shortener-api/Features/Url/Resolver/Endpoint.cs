@@ -5,9 +5,7 @@ namespace Url.Shortener.Api.Features.Url.Resolver;
 
 public record Request(string? GeneratedCode);
 
-public record Response(string OriginalUrl);
-
-public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request, Response>
+public class Endpoint(UrlShortenerDbContext dbContext): Endpoint<Request>
 {
     public override void Configure()
     {
@@ -24,8 +22,13 @@ public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request, Respo
         Logger?.LogInformation("Resolving Generated Code: {GeneratedCode}", req.GeneratedCode);
 
         var record = await dbContext.Urls
-            .SingleAsync(u => u.GeneratedCode == req.GeneratedCode, cancellationToken: ct);
-        
-        await Send.OkAsync(new Response(record.OriginalUrl), cancellation: ct);
+            .SingleOrDefaultAsync(u => u.GeneratedCode == req.GeneratedCode, cancellationToken: ct);
+
+        if (record is null)
+        {
+            await Send.NotFoundAsync(ct);
+        }
+
+        await Send.RedirectAsync(record!.OriginalUrl, allowRemoteRedirects: true);
     }
 }

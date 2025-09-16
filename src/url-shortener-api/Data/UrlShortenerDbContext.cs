@@ -10,4 +10,14 @@ public class UrlShortenerDbContext : DbContext
     { }
 
     public DbSet<ShortenedUrl> Urls => Set<ShortenedUrl>();
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ShortenedUrl>(builder =>
+        {
+            builder
+                .HasIndex(shortenedUrl => shortenedUrl.GeneratedCode)
+                .IsUnique();
+        });
+    }
 }
