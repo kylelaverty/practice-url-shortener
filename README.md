@@ -32,3 +32,8 @@ I will be documenting here how I end up implementing this.
 - Entity Framework Core
 - PostgreSQL
 - Aspire
+
+### EF Core
+
+dotnet ef migrations add InitialDbMigration --context UrlShortenerDbContext --output-dir Data/Migrations/UrlShortener
+dotnet ef database update --context UrlShortenerDbContext
