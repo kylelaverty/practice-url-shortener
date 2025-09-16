@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/url-shortener-api/Url.Shortener.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/aspire/">
+    <Project Path="src/aspire/url-shortener-aspire-apphost/Url.Shortener.Aspire.AppHost.csproj" />
+    <Project Path="src/aspire/url-shortener-aspire-servicedefaults/Url.Shortener.Aspire.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

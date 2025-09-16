@@ -16,6 +16,13 @@ We're going to use the random code generation strategy. It's straightforward to 
 
 I will be documenting here how I end up implementing this.
 
+### Setup
+
+- Create solution
+- Create Aspire AppHost project
+- Create Aspire ServiceDefaults project
+- Create Api project
+
 ### Technologies
 
 - .NET 9
