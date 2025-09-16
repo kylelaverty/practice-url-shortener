@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Url.Shortener.Api.Data;
 using Url.Shortener.Api.Data.Entities;
 using Url.Shortener.Api.Util;
@@ -6,7 +7,7 @@ namespace Url.Shortener.Api.Features.Url.Shorten;
 
 public record Request(string? OriginalUrl);
 
-public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request>
+public class Endpoint(UrlShortenerDbContext dbContext, IOptionsSnapshot<ShortenerSettings> options) : Endpoint<Request>
 {
     public override void Configure()
     {
@@ -25,7 +26,7 @@ public class Endpoint(UrlShortenerDbContext dbContext) : Endpoint<Request>
         var newUrl = new ShortenedUrl()
         {
             OriginalUrl = req.OriginalUrl!,
-            GeneratedCode = SecureAlphanumericGenerator.GenerateSecureRandomAlphanumeric(8),
+            GeneratedCode = SecureAlphanumericGenerator.GenerateSecureRandomAlphanumeric(options.Value.CodeGenLength),
             CreatedDate = DateTime.UtcNow,
         };
         

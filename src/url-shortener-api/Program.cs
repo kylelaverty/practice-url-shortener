@@ -6,6 +6,7 @@ using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Url.Shortener.Api.Data;
+using Url.Shortener.Api.Util;
 
 const string applicationName = "Url Shortener API";
 
@@ -51,6 +52,10 @@ try
 
     // Add the DB Config
     builder.AddNpgsqlDbContext<UrlShortenerDbContext>(connectionName: "urlshortenerdb");
+
+    _ = builder.Services.AddOptions<ShortenerSettings>()
+        .Bind(builder.Configuration.GetSection(ShortenerSettings.SectionName))
+        .Validate(settings => settings.CodeGenLength > 0, "CodeGenLength must be greater than zero");
     
     _ = builder.Services
         .AddFastEndpoints()
